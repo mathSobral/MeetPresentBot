@@ -93,3 +93,13 @@ th {
     background-color: #f1f8ff;
     color: #24292e;
 }
+
+#error-container {
+    color: red;
+    font-weight: bold;
+}
+
+#current-meet{
+    color: purple;
+    font-weight: bold;
+}

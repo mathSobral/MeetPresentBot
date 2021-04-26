@@ -4,17 +4,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
    currentTab.title =  tabs[0].title
-   loadStorage(tabs[0].title)
-  });
-
-  document.querySelector('button').addEventListener('click', onClick, false)
    
-   function onClick(){
-      currentTab.form.push(getFormData())
-      persistTable()
-   }
+   if(currentTabIsMeet()){
+      loadStorage(currentTab.title)
+   
+      document.querySelector('button').addEventListener('click', onClick, false)
+      
+      function onClick(){
+         currentTab.form.push(getFormData())
+         persistTable()
+      }
+
+      pageIsMeet()
+     }
+     else{
+        pageIsNotMeet()
+     }
+
+   });
 
  }, false)
+
+function currentTabIsMeet(){
+   const meet = 'meet'
+   const re = new RegExp(meet, 'gi')
+
+   return currentTab.title.match(re) != null
+}
+
+function pageIsMeet(){
+   let instructionsContainer = document.getElementById("current-meet")
+   instructionsContainer.innerHTML = "Instrucoes:<br>Para a ferramenta functionar corretamente voce deve ativar a extensao somente apos ter aberto a aba de chat"
+}
+
+function pageIsNotMeet(){
+   let errorContainer = document.getElementById("error-container")
+   errorContainer.innerHTML = "Erro<br>A aplicacao so funciona em paginas do google meet"
+}
+
 
 function loadStorage(title){
    chrome.storage.sync.get([title], function(result) {
@@ -30,7 +57,6 @@ function persistTable(){
    });
 }
  
-
 
 function getFormData(){
    const formOutput = {keyword: 'word', howManyTimes: 1, doNotify: true, doAnswer: null, doing: false}

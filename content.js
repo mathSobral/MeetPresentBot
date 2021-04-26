@@ -1,4 +1,4 @@
-const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c'}
+const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c', actionDone: false}
 
 chrome.runtime.onMessage.addListener(function (request) {
   if(!props.isDoing){
@@ -11,13 +11,19 @@ function observeChatContainer(options){
   observer = new MutationObserver(mCallback);
 
   function mCallback(mutations) {
-    console.log(options.howManyTimes)
+    if(!props.actionDone){
+      check(options);
+    }
+  }
+
+  function check(options){
     const re = new RegExp(options.keyword, 'gi')
     const matches = document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0].innerHTML.match(re)
     if(matches !== null) {
       let howManyTimesWasTyped = matches.length / 2
-      console.log(howManyTimesWasTyped)
+      
       if(howManyTimesWasTyped == options.howManyTimes){
+        props.actionDone = true
         if(options.doNotify){
           notifyMe(`Foram digitados ${options.howManyTimes} presentes no chat :)\nTome suas providencias cero`) 
         }
@@ -44,7 +50,7 @@ function sendMessage(message){
     keyCode: 13,
     view: window,
     bubbles: true
-});
+  });
 
   textArea.dispatchEvent(keyboardEvent)
 }
