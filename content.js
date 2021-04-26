@@ -1,10 +1,13 @@
-const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c', actionDone: false}
+const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c', actionDone: false, title: ''}
 
 chrome.runtime.onMessage.addListener(function (request) {
+  props.title = request.title
+
   if(!props.isDoing){
     observeChatContainer(request)
     props.isDoing = true
   }
+
 })
 
 function observeChatContainer(options){
@@ -23,19 +26,33 @@ function observeChatContainer(options){
       let howManyTimesWasTyped = matches.length / 2
       
       if(howManyTimesWasTyped == options.howManyTimes){
-        props.actionDone = true
+        
         if(options.doNotify){
-          notifyMe(`Foram digitados ${options.howManyTimes} presentes no chat :)\nTome suas providencias cero`) 
+          notifyMe(`Foram digitadas ${options.keyword} ${options.howManyTimes} vezes no ${props.title}`) 
         }
         if(options.doAnswer){
           sendMessage(options.doAnswer.answerText)
         }
+        
+        props.actionDone = true
+
+        clearData()
       }
     }
   }
 
   observer.observe(document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0], {childList: true});
 
+}
+
+function clearData(){
+  chrome.storage.sync.set({[props.title]: {title: '', form: []}}, function() {
+    // reseting global variables after 1 sec
+    setTimeout(function(){ 
+      props.isDoing = false
+      props.actionDone = false
+     }, 1000);
+  });
 }
 
 function sendMessage(message){

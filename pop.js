@@ -46,6 +46,8 @@ function pageIsNotMeet(){
 function loadStorage(title){
    chrome.storage.sync.get([title], function(result) {
       if(typeof result[title] !== 'undefined' ) {
+         if(JSON.stringify(result[title]) === JSON.stringify({}))
+            return;
          currentTab.form = result[title].form
          result[title].form.map((line, index) => addRow(line, index, title))
       }
@@ -114,7 +116,7 @@ function addActionButton(sourceIndex, elementContainer, form){
 
 function sendActions(form){
    chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, form)
+      chrome.tabs.sendMessage(tabs[0].id, {...form, title: currentTab.title})
    });
 }
 
