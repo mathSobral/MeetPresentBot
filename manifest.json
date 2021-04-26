@@ -11,5 +11,9 @@
   "browser_action":{
     "default_popup": "popup.html",
     "deault_title": "Present Bot"
-  }
+  },
+  "permissions": [
+    "storage", 
+    "tabs"
+  ]
 }

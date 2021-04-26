@@ -1,16 +1,31 @@
+const props = {isDoing: false}
+
 chrome.runtime.onMessage.addListener(function (request) {
+  if(!props.isDoing){
+    observeChatContainer(request)
+    props.isDoing = true
+  }
+})
+
+function observeChatContainer(options){
   observer = new MutationObserver(mCallback);
 
   function mCallback(mutations) {
-    const re = new RegExp('presente', 'gi')
+    console.log(options.howManyTimes)
+    const re = new RegExp(options.keyword, 'gi')
     const matches = document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0].innerHTML.match(re)
     if(matches !== null) {
-      notifyMe(`Foram digitados ${matches.length / 2} presentes no chat :)`) 
+      let howManyTimesWasTyped = matches.length / 2
+      console.log(howManyTimesWasTyped)
+      if(howManyTimesWasTyped == options.howManyTimes){
+        notifyMe(`Foram digitados ${options.howManyTimes} presentes no chat :)\nTome suas providencias cero`) 
+      }
     }
   }
 
   observer.observe(document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0], {childList: true});
-})
+
+}
 
 function notifyMe(mesage) {
   // Let's check if the browser supports notifications

@@ -1,0 +1,95 @@
+body{
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 300px;
+}
+
+.header{
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.title {
+    color: #333232;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.description{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.action-container {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    align-content: center;
+}
+
+input[type=text], input[type=number]{
+    height: 30px;
+    background-color: #FAFBFC;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: #E1E4E8;
+    font-size: 12px;
+}
+
+#keyword{
+    width: 150px;
+    margin-right: 10px;
+}
+
+#howManyTimes{
+    width: 110px;
+}
+
+#answerText{
+    margin-left: 10px;
+}
+
+.green {
+    background-color: #2ea44f;
+}
+
+.button{
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 4px 8px;
+    text-align: center;
+    font-size: 12px;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover {opacity: 1}
+
+table {
+    border: 1px solid #c8e1ff;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+}
+  
+th, td {
+    border-bottom: 1px solid #eaecef;
+    text-align: left;
+    padding: 6px;
+}
+  
+tr:nth-child(even){background-color: #f2f2f2}
+  
+th {
+    background-color: #f1f8ff;
+    color: #24292e;
+}
