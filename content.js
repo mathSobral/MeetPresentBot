@@ -1,4 +1,4 @@
-const props = {isDoing: false}
+const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c'}
 
 chrome.runtime.onMessage.addListener(function (request) {
   if(!props.isDoing){
@@ -18,13 +18,35 @@ function observeChatContainer(options){
       let howManyTimesWasTyped = matches.length / 2
       console.log(howManyTimesWasTyped)
       if(howManyTimesWasTyped == options.howManyTimes){
-        notifyMe(`Foram digitados ${options.howManyTimes} presentes no chat :)\nTome suas providencias cero`) 
+        if(options.doNotify){
+          notifyMe(`Foram digitados ${options.howManyTimes} presentes no chat :)\nTome suas providencias cero`) 
+        }
+        if(options.doAnswer){
+          sendMessage(options.doAnswer.answerText)
+        }
       }
     }
   }
 
   observer.observe(document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0], {childList: true});
 
+}
+
+function sendMessage(message){
+  const textArea = document.getElementsByClassName(props.messageInputClass).chatTextInput
+
+  textArea.value = message
+
+  const keyboardEvent = new KeyboardEvent('keydown', {
+    code: 'Enter',
+    key: 'Enter',
+    charCode: 13,
+    keyCode: 13,
+    view: window,
+    bubbles: true
+});
+
+  textArea.dispatchEvent(keyboardEvent)
 }
 
 function notifyMe(mesage) {
