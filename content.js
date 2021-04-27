@@ -25,7 +25,7 @@ function observeChatContainer(options){
     if(matches !== null) {
       let howManyTimesWasTyped = matches.length / 2
       
-      if(howManyTimesWasTyped == options.howManyTimes){
+      if(howManyTimesWasTyped >= options.howManyTimes){
         
         if(options.doNotify){
           notifyMe(`Foram digitadas ${options.keyword} ${options.howManyTimes} vezes no ${props.title}`) 
@@ -33,7 +33,7 @@ function observeChatContainer(options){
         if(options.doAnswer){
           sendMessage(options.doAnswer.answerText)
         }
-        
+
         props.actionDone = true
 
         clearData()
@@ -50,7 +50,6 @@ function clearData(){
     // reseting global variables after 1 sec
     setTimeout(function(){ 
       props.isDoing = false
-      props.actionDone = false
      }, 1000);
   });
 }
