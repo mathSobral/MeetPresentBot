@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('button').addEventListener('click', onClick, false)
       
       function onClick(){
+         if(currentTab.form.length >= 1){
+            alert('So e possível adicionar uma regra por vez!')
+            return
+         }
          currentTab.form.push(getFormData())
          persistTable()
       }
@@ -34,7 +38,8 @@ function currentTabIsMeet(){
 
 function pageIsMeet(){
    let instructionsContainer = document.getElementById("current-meet")
-   instructionsContainer.innerHTML = "Instrucoes:<br>Para a ferramenta functionar corretamente voce deve ativar a extensao somente apos ter aberto a aba de chat"
+   instructionsContainer.innerHTML = `Instrucoes:<br>
+                                      Para a ferramenta functionar corretamente voce deve ativar a extensao somente apos ter aberto a aba de chat`
 }
 
 function pageIsNotMeet(){
@@ -106,17 +111,31 @@ function addActionButton(sourceIndex, elementContainer, form){
    }
    else{
       button.addEventListener ("click", function() {
-         sendActions(form)
+         sendActions(form, displayActionsMessage)
+         
+     });
+   }
+
+   function displayActionsMessage(status){
+      if(status == "success"){
+         let tableMessageContainer = document.getElementById("tableMessageSuccess")
+         tableMessageContainer.innerHTML = "Acao adicionada com sucesso!"
          form.doing = true
          persistTable()
          button.disabled = true
-   });
+      }
+      else if(status == "failed"){
+         let tableMessageContainer = document.getElementById("tableMessageFailed")
+         tableMessageContainer.innerHTML = "Erro Voce deve abrir o de chat antes de tentar adicionar uma regra!"
+      }
    }
 }
 
-function sendActions(form){
+
+
+function sendActions(form, displayActionsMessage){
    chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {...form, title: currentTab.title})
+      chrome.tabs.sendMessage(tabs[0].id, {...form, title: currentTab.title}, displayActionsMessage)
    });
 }
 

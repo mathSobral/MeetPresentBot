@@ -1,10 +1,16 @@
-const props = {isDoing: false, messageInputClass: 'KHxj8b tL9Q4c', actionDone: false, title: ''}
+const props = {isDoing: false, messageInputClassName: 'KHxj8b tL9Q4c', chatClassName: "z38b6 CnDs7d hPqowe", actionDone: false, title: ''}
 
-chrome.runtime.onMessage.addListener(function (request) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendRequest) {
   props.title = request.title
+
+  if(!chatIsOpen()){
+    sendRequest("failed")
+    return;
+  }
 
   if(!props.isDoing){
     observeChatContainer(request)
+    sendRequest("success")
     props.isDoing = true
   }
 
@@ -21,7 +27,7 @@ function observeChatContainer(options){
 
   function check(options){
     const re = new RegExp(options.keyword, 'gi')
-    const matches = document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0].innerHTML.match(re)
+    const matches = getChatContainer().innerHTML.match(re)
     if(matches !== null) {
       let howManyTimesWasTyped = matches.length / 2
       
@@ -41,8 +47,16 @@ function observeChatContainer(options){
     }
   }
 
-  observer.observe(document.getElementsByClassName("z38b6 CnDs7d hPqowe")[0], {childList: true});
+  observer.observe(getChatContainer(), {childList: true});
 
+}
+
+function chatIsOpen(){
+  return document.getElementsByClassName(props.chatClassName)[0] != undefined
+}
+
+function getChatContainer(){
+  return document.getElementsByClassName(props.chatClassName)[0]
 }
 
 function clearData(){
@@ -55,7 +69,7 @@ function clearData(){
 }
 
 function sendMessage(message){
-  const textArea = document.getElementsByClassName(props.messageInputClass).chatTextInput
+  const textArea = document.getElementsByClassName(props.messageInputClassName).chatTextInput
 
   textArea.value = message
 
@@ -72,27 +86,23 @@ function sendMessage(message){
 }
 
 function notifyMe(mesage) {
-  // Let's check if the browser supports notifications
+
   if (!("Notification" in window)) {
     alert("This browser does not support desktop notification");
   }
 
-  // Let's check whether notification permissions have already been granted
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
     var notification = new Notification(mesage);
   }
 
-  // Otherwise, we need to ask the user for permission
   else if (Notification.permission !== "denied") {
     Notification.requestPermission().then(function (permission) {
-      // If the user accepts, let's create a notification
+      
       if (permission === "granted") {
         var notification = new Notification(mesage);
       }
     });
   }
 
-  // At last, if the user has denied notifications, and you
-  // want to be respectful there is no need to bother them any more.
 }

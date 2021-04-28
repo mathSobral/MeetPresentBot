@@ -103,3 +103,13 @@ th {
     color: purple;
     font-weight: bold;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: chartreuse;
+    font-weight: bold;
+}
